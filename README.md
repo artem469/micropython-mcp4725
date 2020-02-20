@@ -76,8 +76,8 @@ everytime the DAC is powered up or reset.
 ###Read settings and output voltage of the MCP4725
 The MCP4725 support a single read command that returns the current configuration as well as the configuration stored in the eeprom of the device. 
 ```python
->>>result=dac.read()
->>>print(result)
+result=dac.read()
+print(result)
 >>>(False,'Off',300,'1k',200)
 ```
 The method returns a tuple with 5 items. 
@@ -103,26 +103,3 @@ The result shown in the code example will read as
 [Datasheet](http://www.microchip.com/wwwproducts/en/en532229)).
 * The output voltage on startup or after a reset will be ``200/4096`` of the supply
   voltage.
-
-##Example session on the REPL
-```python
-MicroPython v1.8.3-80-g1f61fe0 on 2016-08-31; WiPy with CC3200 
-Type "help()" for more information.
->>> from machine import I2C                                                                                                                                     
->>> i2c=I2C(0,I2C.MASTER,baudrate=400000,pins=('GP15','GP14'))
->>> from mcp4725 import MCP4725, BUS_ADDRESS
->>> dac=MCP4725(i2c,BUS_ADDRESS[0])
->>> dac.read()
-(False, 'Off', 2048, 'Off',100)
->>> dac.write(3000)
-True
->>> dac.config(power_down='Off',value=0,eeprom=True)
-True                                                                                                                                                           
->>> dac.read()
-(False, 'Off', 0, 'Off', 0)
->>> dac.write(2000)
-True                                                                                                                                                           
->>> dac.read()
-(False, 'Off', 2000, 'Off', 0)
->>>
-```
