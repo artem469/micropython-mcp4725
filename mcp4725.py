@@ -23,14 +23,14 @@ class MCP4725:
 
     def read(self):
         buf=bytearray(5)
-        if self.i2c.readfrom_into(self.address,buf) ==5:
-            eeprom_write_busy=(buf[0] & 0x80)==0
-            power_down=self._powerDownKey((buf[0] >> 1) & 0x03)
-            value=((buf[1]<<8) | (buf[2])) >> 4
-            eeprom_power_down=self._powerDownKey((buf[3]>>5) & 0x03)
-            eeprom_value=((buf[3] & 0x0f)<<8) | buf[4] 
-            return (eeprom_write_busy,power_down,value,eeprom_power_down,eeprom_value)
-        return None
+    #    if self.i2c.readfrom_into(self.address,buf) ==5:
+        eeprom_write_busy=(buf[0] & 0x80)==0
+        power_down=self._powerDownKey((buf[0] >> 1) & 0x03)
+        value=((buf[1]<<8) | (buf[2])) >> 4
+        eeprom_power_down=self._powerDownKey((buf[3]>>5) & 0x03)
+        eeprom_value=((buf[3] & 0x0f)<<8) | buf[4] 
+        return (eeprom_write_busy,power_down,value,eeprom_power_down,eeprom_value)
+    #    return None
 
     def config(self,power_down='Off',value=0,eeprom=False):
         buf=bytearray()
