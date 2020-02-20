@@ -1,5 +1,5 @@
 
-A driver for the MCP4725 I²C DAC.
+A python raspberry pi driver for the MCP4725 I²C DAC.
 
 The MCP4725 is a digital to analog converter chip with a 12-Bit resolution on
 the output. The MCP4725 works with a supply voltage from 3.3V to 5V. The output range runs from 0V up to the supply voltage. 
@@ -17,12 +17,13 @@ output voltage can be configured that are to be used when the MCP4725 is powered
 up.
 
 
-###Create and initialze the device on the I²C bus of your micropython board
+###   Create and initialze the device on the I²C bus of your micropython board
 import busio
 
 ```python
 
-from machine import I2C
+import busio
+import board
 import mcp4725
 
 #create a I2C bus
@@ -32,7 +33,7 @@ i2c = busio.I2C(board.SCL, board.SDA)
 dac = mcp4725.MCP4725(i2c, 0x60)
 ```
 
-###Update the output on the MCP4725
+###   Update the output on the MCP4725
 The simple way to update the output on the DAC is to write a new value to the
 device
 ```python
@@ -48,7 +49,7 @@ will be set to the maximum output voltage of the DAC.
 On power-up the MCP4725 will be initialized with the value read from the
 internal eeprom of the device.
 
-###Configure the MCP4725
+###   Configure the MCP4725
 The power-down mode (see
 [Datasheet](http://www.microchip.com/wwwproducts/en/en532229)) and the output
 value of the DAC can be configured for the active session and for future
@@ -73,11 +74,12 @@ dac.config('Off',2048, eeprom=True)
 This configuration will be saved in the eeprom of the DAC and will be used
 everytime the DAC is powered up or reset.
 
-###Read settings and output voltage of the MCP4725
+###   Read settings and output voltage of the MCP4725
 The MCP4725 support a single read command that returns the current configuration as well as the configuration stored in the eeprom of the device. 
 ```python
 result=dac.read()
 print(result)
+
 >>>(False,'Off',300,'1k',200)
 ```
 The method returns a tuple with 5 items. 
