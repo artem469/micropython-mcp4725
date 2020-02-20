@@ -1,35 +1,24 @@
-# micropython-mcp4725
-A [micropython](http://micropython.org) driver for the MCP4725 I²C DAC.
+
+A driver for the MCP4725 I²C DAC.
 
 The MCP4725 is a digital to analog converter chip with a 12-Bit resolution on
 the output. The MCP4725 works with a supply voltage from 3.3V to 5V. The output range runs from 0V up to the supply voltage. 
 
-The MCP4725 can be configured to use one of two different addresses (0x62,0x63) on the I²C bus.
+The MCP4725 can be configured to use one of two different addresses (0x60,0x61) on the I²C bus.
 That way it is possible to use 2 MCP4725 on any I²C bus. The device supports
-standard (100kbps) and fast (400kbps) and hi-speed (3.4Mbps) bus speeds. But
-hi-speed seems not to be supported by any of the micropython hardware boards.
-The fast baudrate of 400kbps works fine with the 
-[WiPy](https://www.pycom.io/solutions/py-boards/wipy/) but compared with DACs
-that are connected to a SPI-bus updates to the output voltage on a MCP4725 are still pretty slow.
+standard (100kbps) and fast (400kbps) and hi-speed (3.4Mbps) bus speeds.
 
 The MCP4725 supports 3 different power-down modes where the output voltage
-driver shuts down and the device goes to sleep to save energy. The cips wakes up
+driver shuts down and the device goes to sleep to save energy. The chips wakes up
 from power-down mode whenever a output voltage update is send to the device.
 
 The MCP4725 also has a small eeprom where the power-down mode and the initial
 output voltage can be configured that are to be used when the MCP4725 is powered
 up.
 
-##Using the MCP4725 in your micropython project
-You need only a few lines of code to add a MCP4725 to your project. (see [Issue 1](https://github.com/wayoda/micropython-mcp4725/issues/1) if you don't like
-libraries)
 
 ###Create and initialze the device on the I²C bus of your micropython board
-A micropython driver for an I²C device expects you to create and initialze a
-``machine.I2C`` instance and pass that to the constructor of the driver code.
-
-The arguments used in the code example below work for a [WiPy](https://www.pycom.io/solutions/py-boards/wipy/) board. If you try this with a
-different board please check the pins to use for the I²C bus. 
+import busio
 
 ```python
 
@@ -37,10 +26,10 @@ from machine import I2C
 import mcp4725
 
 #create a I2C bus
-i2c=I2C(0,I2C.MASTER,baudrate=400000,pins=('GP15','GP14')) 
+i2c = busio.I2C(board.SCL, board.SDA)
 
 #create the MCP4725 driver
-dac=mcp4725.MCP4725(i2c,mcp4725.BUS_ADDRESS[0])
+dac = mcp4725.MCP4725(i2c, 0x60)
 ```
 
 ###Update the output on the MCP4725
